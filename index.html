@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retinoscopy</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: Arial, sans-serif;
+  background: #f4f4f2;
+  color: #1a1a1a;
+  padding: 24px 16px;
+  min-height: 100vh;
+}
+h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
+.eye-card {
+  background: #ffffff;
+  border: 0.5px solid rgba(0,0,0,0.15);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 16px;
+  max-width: 560px;
+}
+.eye-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #888;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.meridian-row {
+  display: flex;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+.meridian-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.line-canvas { width: 64px; height: 64px; display: flex; align-items: center; justify-content: center; }
+.line-svg { width: 64px; height: 64px; transition: transform 0.15s ease; }
+.col-label { font-size: 11px; color: #999; }
+.inputs-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.field { display: flex; flex-direction: column; gap: 5px; }
+.field label { font-size: 11px; color: #888; text-align: center; }
+.stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 46px;
+}
+.stepper.readonly-stepper {
+  background: #f9f9f9;
+  border-color: #eee;
+  justify-content: center;
+}
+.stepper-btn {
+  width: 34px;
+  min-width: 34px;
+  height: 100%;
+  background: #f4f4f2;
+  border: none;
+  font-size: 22px;
+  line-height: 1;
+  color: #444;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  transition: background 0.1s;
+  flex-shrink: 0;
+}
+.stepper-btn:active { background: #ddd; }
+.stepper-val {
+  flex: 1;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #1a1a1a;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.stepper-val.pos { color: #1a7a45; }
+.stepper-val.neg { color: #c0392b; }
+.result-box {
+  background: #f4f4f2;
+  border-radius: 8px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #1a1a1a;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.result-box.empty { color: #bbb; font-weight: 400; font-size: 13px; }
+.pos { color: #1a7a45; }
+.neg { color: #c0392b; }
+.wd-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 560px;
+  padding: 8px 0;
+}
+.wd-row label { font-size: 13px; color: #666; }
+.wd-stepper {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 46px;
+}
+.wd-stepper .stepper-btn { width: 46px; min-width: 46px; }
+.wd-stepper .stepper-val { min-width: 72px; font-size: 14px; }
+
+@media (prefers-color-scheme: dark) {
+  body { background: #1c1c1c; color: #e8e8e8; }
+  .eye-card { background: #2a2a2a; border-color: rgba(255,255,255,0.1); }
+  .stepper { border-color: #444; }
+  .stepper.readonly-stepper { background: #222; border-color: #333; }
+  .stepper-btn { background: #333; color: #ccc; }
+  .stepper-btn:active { background: #444; }
+  .stepper-val { color: #e8e8e8; }
+  .result-box { background: #333; color: #e8e8e8; }
+  .result-box.empty { color: #666; }
+  .wd-stepper { border-color: #444; }
+  .pos { color: #4caf7d; }
+  .neg { color: #e57373; }
+}
+</style>
+</head>
+<body>
+
+<h2>Retinoscopy</h2>
+
+<!-- OD -->
+<div class="eye-card">
+  <div class="eye-label">OD — Right Eye</div>
+  <div class="meridian-row">
+    <div class="meridian-col">
+      <div class="line-canvas">
+        <svg class="line-svg" id="svg-od-1" viewBox="0 0 64 64" fill="none">
+          <line x1="32" y1="4" x2="32" y2="60" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="col-label">Meridian 1</span>
+    </div>
+    <div class="meridian-col">
+      <div class="line-canvas">
+        <svg class="line-svg" id="svg-od-2" viewBox="0 0 64 64" fill="none">
+          <line x1="32" y1="4" x2="32" y2="60" stroke="#aaa" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="5 3"/>
+        </svg>
+      </div>
+      <span class="col-label">Meridian 2</span>
+    </div>
+  </div>
+  <div class="inputs-row">
+    <div class="field">
+      <label>Axis 1</label>
+      <div class="stepper">
+        <button class="stepper-btn" data-key="od_a1" data-step="-1">−</button>
+        <span class="stepper-val" id="od_a1_disp">0</span>
+        <button class="stepper-btn" data-key="od_a1" data-step="1">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Axis 2</label>
+      <div class="stepper readonly-stepper">
+        <span class="stepper-val" id="od_a2_disp">90</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Sphere 1</label>
+      <div class="stepper">
+        <button class="stepper-btn" data-key="od_s1" data-step="-0.25">−</button>
+        <span class="stepper-val" id="od_s1_disp">0.00</span>
+        <button class="stepper-btn" data-key="od_s1" data-step="0.25">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Sphere 2</label>
+      <div class="stepper">
+        <button class="stepper-btn" data-key="od_s2" data-step="-0.25">−</button>
+        <span class="stepper-val" id="od_s2_disp">0.00</span>
+        <button class="stepper-btn" data-key="od_s2" data-step="0.25">+</button>
+      </div>
+    </div>
+  </div>
+  <div class="result-box empty" id="od_out">Adjust values above</div>
+</div>
+
+<!-- OS -->
+<div class="eye-card">
+  <div class="eye-label">OS — Left Eye</div>
+  <div class="meridian-row">
+    <div class="meridian-col">
+      <div class="line-canvas">
+        <svg class="line-svg" id="svg-os-1" viewBox="0 0 64 64" fill="none">
+          <line x1="32" y1="4" x2="32" y2="60" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <span class="col-label">Meridian 1</span>
+    </div>
+    <div class="meridian-col">
+      <div class="line-canvas">
+        <svg class="line-svg" id="svg-os-2" viewBox="0 0 64 64" fill="none">
+          <line x1="32" y1="4" x2="32" y2="60" stroke="#aaa" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="5 3"/>
+        </svg>
+      </div>
+      <span class="col-label">Meridian 2</span>
+    </div>
+  </div>
+  <div class="inputs-row">
+    <div class="field">
+      <label>Axis 1</label>
+      <div class="stepper">
+        <button class="stepper-btn" data-key="os_a1" data-step="-1">−</button>
+        <span class="stepper-val" id="os_a1_disp">0</span>
+        <button class="stepper-btn" data-key="os_a1" data-step="1">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Axis 2</label>
+      <div class="stepper readonly-stepper">
+        <span class="stepper-val" id="os_a2_disp">90</span>
+      </div>
+    </div>
+    <div class="field">
+      <label>Sphere 1</label>
+      <div class="stepper">
+        <button class="stepper-btn" data-key="os_s1" data-step="-0.25">−</button>
+        <span class="stepper-val" id="os_s1_disp">0.00</span>
+        <button class="stepper-btn" data-key="os_s1" data-step="0.25">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Sphere 2</label>
+      <div class="stepper">
+        <button class="stepper-btn" data-key="os_s2" data-step="-0.25">−</button>
+        <span class="stepper-val" id="os_s2_disp">0.00</span>
+        <button class="stepper-btn" data-key="os_s2" data-step="0.25">+</button>
+      </div>
+    </div>
+  </div>
+  <div class="result-box empty" id="os_out">Adjust values above</div>
+</div>
+
+<!-- Working Distance -->
+<div class="wd-row">
+  <label>Working distance (D)</label>
+  <div class="wd-stepper">
+    <button class="stepper-btn" data-key="wd" data-step="-0.25">−</button>
+    <span class="stepper-val" id="wd_disp">2.00</span>
+    <button class="stepper-btn" data-key="wd" data-step="0.25">+</button>
+  </div>
+</div>
+
+<script>
+const state = {
+  od_a1: 0, od_s1: 0, od_s2: 0,
+  os_a1: 0, os_s1: 0, os_s2: 0,
+  wd: 2.00
+};
+
+function round025(x) { return Math.round(x * 4) / 4; }
+function fmt(x) { return (x >= 0 ? "+" : "") + x.toFixed(2); }
+function clampAxis(v) {
+  let x = Math.round(v);
+  if (x < 0) x = 0;
+  if (x > 179) x = 179;
+  return x;
+}
+
+function updateDisp(id, val, isAxis) {
+  let el = document.getElementById(id + "_disp");
+  if (!el) return;
+  if (isAxis) {
+    el.textContent = val;
+    el.className = "stepper-val";
+  } else {
+    el.textContent = fmt(val);
+    el.className = "stepper-val" + (val > 0 ? " pos" : val < 0 ? " neg" : "");
+  }
+}
+
+function setResult(elId, s1, s2, a1, a2, wd) {
+  let el = document.getElementById(elId);
+  let S = Math.max(s1, s2);
+  let C = Math.min(s1, s2) - S;
+  let A = (s1 >= s2) ? a1 : a2;
+  let finalS = S - wd;
+  let sc = finalS >= 0 ? "pos" : "neg";
+  let cc = C >= 0 ? "pos" : "neg";
+  el.innerHTML =
+    `<span class="${sc}">${fmt(finalS)}</span>` +
+    `&nbsp;/&nbsp;<span class="${cc}">${fmt(C)}</span>` +
+    `&nbsp;&times;&nbsp;<span>${A}&deg;</span>`;
+  el.className = "result-box";
+}
+
+function process() {
+  ["od", "os"].forEach(eye => {
+    let a1 = clampAxis(state[eye + "_a1"]);
+    state[eye + "_a1"] = a1;
+    let a2 = (a1 + 90) % 180;
+
+    updateDisp(eye + "_a1", a1, true);
+    let a2el = document.getElementById(eye + "_a2_disp");
+    if (a2el) a2el.textContent = a2;
+
+    let svg1 = document.getElementById("svg-" + eye + "-1");
+    let svg2 = document.getElementById("svg-" + eye + "-2");
+    if (svg1) svg1.style.transform = `rotate(${a1}deg)`;
+    if (svg2) svg2.style.transform = `rotate(${a2}deg)`;
+
+    updateDisp(eye + "_s1", state[eye + "_s1"], false);
+    updateDisp(eye + "_s2", state[eye + "_s2"], false);
+
+    setResult(eye + "_out", state[eye + "_s1"], state[eye + "_s2"], a1, a2, state.wd);
+  });
+
+  let wdEl = document.getElementById("wd_disp");
+  if (wdEl) wdEl.textContent = state.wd.toFixed(2);
+}
+
+document.querySelectorAll(".stepper-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    let key = btn.dataset.key;
+    let step = parseFloat(btn.dataset.step);
+    if (!(key in state)) return;
+    let val = round025(state[key] + step);
+    if (key.endsWith("_a1")) val = clampAxis(val);
+    state[key] = val;
+    process();
+  });
+});
+
+process();
+</script>
+</body>
+</html>
