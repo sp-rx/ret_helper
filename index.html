@@ -42,13 +42,13 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
   align-items: center;
   gap: 6px;
 }
-.line-canvas { width: 124px; height: 124px; display: flex; align-items: center; justify-content: center; }
-.line-svg { width: 124px; height: 124px;}
+.line-canvas { width: 94px; height: 94px; display: flex; align-items: center; justify-content: center; }
+.line-svg { width: 94px; height: 94px;}
 .col-label { font-size: 11px; color: #999; }
 .inputs-row {
   display: grid;
   grid-template-columns: 1fr 1fr 30px 1fr 1fr;
-  gap: 10px;
+  gap: 15px;
   margin-bottom:10px;
 }
 .field { display: flex; flex-direction: column; gap: 5px; }
@@ -67,7 +67,7 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
-  height: 30px;
+  height: 40px;
 }
 .stepper.readonly-stepper {
   background: #f9f9f9;
@@ -76,12 +76,11 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
 }
 
 .stepper-btn {
-  width: 35px;
-  min-width: 35px;
+  width: 25%;
   height: 100%;
   background: #f4f4f2;
   border: none;
-  font-size: 22px;
+  font-size: 15px;
   line-height: 1;
   color: #444;
   cursor: pointer;
@@ -91,7 +90,6 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
   user-select: none;
   -webkit-user-select: none;
   touch-action: manipulation;
-  transition: background 0.1s;
   flex-shrink: 0;
 }
 .stepper-btn:active { background: #ddd; }
@@ -136,9 +134,10 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
   border-radius: 8px;
   overflow: hidden;
   height: 46px;
+  background-color:white;
 }
 .wd-stepper .stepper-btn { width: 46px; min-width: 46px; }
-.wd-stepper .stepper-val { min-width: 72px; font-size: 14px; }
+.wd-stepper .stepper-val { min-width: 72px; font-size: 14px; background-color:white; }
 
 @media (prefers-color-scheme: dark) {
   body { background: #1c1c1c; color: #e8e8e8; }
@@ -164,9 +163,9 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
 <div class="wd-row">
   <label>Working distance (D)</label>
   <div class="wd-stepper">
-    <button class="stepper-btn" data-key="wd" data-step="-0.25">−</button>
+    <button style="color:red" class="stepper-btn" data-key="wd" data-step="-0.25">−</button>
     <span class="stepper-val" id="wd_disp">2.00</span>
-    <button class="stepper-btn" data-key="wd" data-step="0.25">+</button>
+    <button style="color:green" class="stepper-btn" data-key="wd" data-step="0.25">+</button>
   </div>
 </div>
 
@@ -177,7 +176,7 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
 
 <!-- OD -->
 <div class="eye-card">
-  <div class="eye-label">OD — Right Eye</div>
+  <div class="eye-label">Right Eye</div>
 
   <div class="meridian-row">
 
@@ -206,69 +205,72 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
 
   <div class="inputs-row">
 
-    <div class="field">
-      <label>Sphere 1</label>
-      <div class="stepper">
-        <button class="stepper-btn" data-key="od_s2" data-step="-0.25">−</button>
-        <span class="stepper-val" id="od_s2_disp">0.00</span>
-        <button class="stepper-btn" data-key="od_s2" data-step="0.25">+</button>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Axis 1</label>
-      <div class="stepper">
-        <span class="stepper-val" id="od_a1_disp">0</span>
-      </div>
-    <div class="stepper2">
-        <button style="color:red" class="stepper-btn" data-key="od_a1" data-step="-30">--</button>
-        <button style="color:green" class="stepper-btn" data-key="od_a1" data-step="30">++</button>
-        <button style="color:red" class="stepper-btn" data-key="od_a1" data-step="-5">-</button>
-        <button style="color:green" class="stepper-btn" data-key="od_a1" data-step="5">+</button>
-
-      </div>
-    </div>
-
-  <div></div> <!-- spacer -->
-
-
-    <div class="field">
-      <label>Sphere 2</label>
-      <div class="stepper">
-        <span class="stepper-val" id="od_s1_disp">0.00</span>
-      </div>
-    <div class="stepper2">
-        <button style="color:red" class="stepper-btn" data-key="od_s1" data-step="-1.00">--</button>
-        <button style="color:green" class="stepper-btn" data-key="od_s1" data-step="1.00">++</button>
-        <button style="color:red" class="stepper-btn" data-key="od_s1" data-step="-0.25">-</button>
-        <button style="color:green" class="stepper-btn" data-key="od_s1" data-step="0.25">+</button>
-
-      </div>
-    </div>
-
-
-    <div class="field">
-      <label>Axis 2</label>
-<div class="stepper">
-  <button class="stepper-btn" data-key="od_a2" data-step="-5">−</button>
-  <span class="stepper-val" id="od_a2_disp">90</span>
-  <button class="stepper-btn" data-key="od_a2" data-step="5">+</button>
-</div>
-    </div>
-
-
-
-
+<div class="field">
+  <label>Sphere 1</label>
+  <div class="stepper">
+    <span class="stepper-val" id="od_s2_disp">0.00</span>
   </div>
 
+  <div class="stepper2">
+    <button style="color:red" class="stepper-btn" data-key="od_s2" data-step="-1.00">--</button>
+    <button style="color:green" class="stepper-btn" data-key="od_s2" data-step="1.00">++</button>
+    <button style="color:red" class="stepper-btn" data-key="od_s2" data-step="-0.25">-</button>
+    <button style="color:green" class="stepper-btn" data-key="od_s2" data-step="0.25">+</button>
+  </div>
+</div>
 
+<div class="field">
+  <label>Axis 1</label>
+  <div class="stepper">
+    <span class="stepper-val" id="od_a1_disp">0</span>
+  </div>
+
+  <div class="stepper2">
+    <button style="color:red" class="stepper-btn" data-key="od_a1" data-step="-30">--</button>
+    <button style="color:green" class="stepper-btn" data-key="od_a1" data-step="30">++</button>
+    <button style="color:red" class="stepper-btn" data-key="od_a1" data-step="-5">-</button>
+    <button style="color:green" class="stepper-btn" data-key="od_a1" data-step="5">+</button>
+  </div>
+</div>
+
+<div></div> <!-- spacer -->
+
+<div class="field">
+  <label>Sphere 2</label>
+  <div class="stepper">
+    <span class="stepper-val" id="od_s1_disp">0.00</span>
+  </div>
+
+  <div class="stepper2">
+    <button style="color:red" class="stepper-btn" data-key="od_s1" data-step="-1.00">--</button>
+    <button style="color:green" class="stepper-btn" data-key="od_s1" data-step="1.00">++</button>
+    <button style="color:red" class="stepper-btn" data-key="od_s1" data-step="-0.25">-</button>
+    <button style="color:green" class="stepper-btn" data-key="od_s1" data-step="0.25">+</button>
+  </div>
+</div>
+
+<div class="field">
+  <label>Axis 2</label>
+  <div class="stepper">
+    <span class="stepper-val" id="od_a2_disp">90</span>
+  </div>
+
+  <div class="stepper2">
+    <button style="color:red" class="stepper-btn" data-key="od_a2" data-step="-30">--</button>
+    <button style="color:green" class="stepper-btn" data-key="od_a2" data-step="30">++</button>
+    <button style="color:red" class="stepper-btn" data-key="od_a2" data-step="-5">-</button>
+    <button style="color:green" class="stepper-btn" data-key="od_a2" data-step="5">+</button>
+  </div>
+</div>
+
+</div>
 
   <div class="result-box empty" id="od_out">Adjust values above</div>
 </div>
 
 <!-- OS -->
 <div class="eye-card">
-  <div class="eye-label">OS — Left Eye</div>
+  <div class="eye-label">Left Eye</div>
   <div class="meridian-row">
     <div class="meridian-col">
       <div class="line-canvas">
@@ -288,50 +290,63 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
     </div>
   </div>
   <div class="inputs-row">
+<div class="field">
+  <label>Sphere 1</label>
+  <div class="stepper">
+    <span class="stepper-val" id="os_s2_disp">0.00</span>
+  </div>
 
-    <div class="field">
-      <label>Sphere 1</label>
-      <div class="stepper">
-        <button class="stepper-btn" data-key="os_s2" data-step="-0.25">−</button>
-        <span class="stepper-val" id="os_s2_disp">0.00</span>
-        <button class="stepper-btn" data-key="os_s2" data-step="0.25">+</button>
-      </div>
-    </div>
-
-
-
-    <div class="field">
-      <label>Axis 1</label>
-      <div class="stepper">
-        <button class="stepper-btn" data-key="os_a1" data-step="-5">−</button>
-        <span class="stepper-val" id="os_a1_disp">0</span>
-        <button class="stepper-btn" data-key="os_a1" data-step="5">+</button>
-      </div>
-    </div>
-
-
-  <div></div> <!-- spacer -->
-
-
-
-    <div class="field">
-      <label>Sphere 2</label>
-      <div class="stepper">
-        <button class="stepper-btn" data-key="os_s1" data-step="-0.25">−</button>
-        <span class="stepper-val" id="os_s1_disp">0.00</span>
-        <button class="stepper-btn" data-key="os_s1" data-step="0.25">+</button>
-      </div>
-    </div>
-
-    <div class="field">
-      <label>Axis 2</label>
-<div class="stepper">
-  <button class="stepper-btn" data-key="os_a2" data-step="-5">−</button>
-  <span class="stepper-val" id="os_a2_disp">90</span>
-  <button class="stepper-btn" data-key="os_a2" data-step="5">+</button>
+  <div class="stepper2">
+    <button style="color:red" class="stepper-btn" data-key="os_s2" data-step="-1.00">--</button>
+    <button style="color:green" class="stepper-btn" data-key="os_s2" data-step="1.00">++</button>
+    <button style="color:red" class="stepper-btn" data-key="os_s2" data-step="-0.25">-</button>
+    <button style="color:green" class="stepper-btn" data-key="os_s2" data-step="0.25">+</button>
+  </div>
 </div>
-    </div>
 
+<div class="field">
+  <label>Axis 1</label>
+  <div class="stepper">
+    <span class="stepper-val" id="os_a1_disp">0</span>
+  </div>
+
+  <div class="stepper2">
+    <button style="color:red" class="stepper-btn" data-key="os_a1" data-step="-30">--</button>
+    <button style="color:green" class="stepper-btn" data-key="os_a1" data-step="30">++</button>
+    <button style="color:red" class="stepper-btn" data-key="os_a1" data-step="-5">-</button>
+    <button style="color:green" class="stepper-btn" data-key="os_a1" data-step="5">+</button>
+  </div>
+</div>
+
+<div></div> <!-- spacer -->
+
+<div class="field">
+  <label>Sphere 2</label>
+  <div class="stepper">
+    <span class="stepper-val" id="os_s1_disp">0.00</span>
+  </div>
+
+  <div class="stepper2">
+    <button style="color:red" class="stepper-btn" data-key="os_s1" data-step="-1.00">--</button>
+    <button style="color:green" class="stepper-btn" data-key="os_s1" data-step="1.00">++</button>
+    <button style="color:red" class="stepper-btn" data-key="os_s1" data-step="-0.25">-</button>
+    <button style="color:green" class="stepper-btn" data-key="os_s1" data-step="0.25">+</button>
+  </div>
+</div>
+
+<div class="field">
+  <label>Axis 2</label>
+  <div class="stepper">
+    <span class="stepper-val" id="os_a2_disp">90</span>
+  </div>
+
+  <div class="stepper2">
+    <button style="color:red" class="stepper-btn" data-key="os_a2" data-step="-30">--</button>
+    <button style="color:green" class="stepper-btn" data-key="os_a2" data-step="30">++</button>
+    <button style="color:red" class="stepper-btn" data-key="os_a2" data-step="-5">-</button>
+    <button style="color:green" class="stepper-btn" data-key="os_a2" data-step="5">+</button>
+  </div>
+</div>
 
 
   </div>
