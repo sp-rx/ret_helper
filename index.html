@@ -20,7 +20,7 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 16px;
-  max-width: 650px;
+  max-width: 750px;
 }
 .eye-label {
   font-size: 12px;
@@ -59,7 +59,15 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
   border: 1px solid #ddd;
   border-radius: 8px;
   overflow: hidden;
-  height: 46px;
+  height: 45px;
+}
+.stepper2 {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  overflow: hidden;
+  height: 30px;
 }
 .stepper.readonly-stepper {
   background: #f9f9f9;
@@ -68,8 +76,8 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
 }
 
 .stepper-btn {
-  width: 24px;
-  min-width: 24px;
+  width: 35px;
+  min-width: 35px;
   height: 100%;
   background: #f4f4f2;
   border: none;
@@ -210,9 +218,14 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
     <div class="field">
       <label>Axis 1</label>
       <div class="stepper">
-        <button class="stepper-btn" data-key="od_a1" data-step="-5">−</button>
         <span class="stepper-val" id="od_a1_disp">0</span>
-        <button class="stepper-btn" data-key="od_a1" data-step="5">+</button>
+      </div>
+    <div class="stepper2">
+        <button style="color:red" class="stepper-btn" data-key="od_a1" data-step="-30">--</button>
+        <button style="color:green" class="stepper-btn" data-key="od_a1" data-step="30">++</button>
+        <button style="color:red" class="stepper-btn" data-key="od_a1" data-step="-5">-</button>
+        <button style="color:green" class="stepper-btn" data-key="od_a1" data-step="5">+</button>
+
       </div>
     </div>
 
@@ -222,10 +235,13 @@ h2 { font-size: 20px; font-weight: 500; margin-bottom: 20px; }
     <div class="field">
       <label>Sphere 2</label>
       <div class="stepper">
-        <button class="stepper-btn" data-key="od_s1" data-step="-0.25">-</button>
-        <button class="stepper-btn" data-key="od_s1" data-step="0.25">+</button>
         <span class="stepper-val" id="od_s1_disp">0.00</span>
-
+      </div>
+    <div class="stepper2">
+        <button style="color:red" class="stepper-btn" data-key="od_s1" data-step="-1.00">--</button>
+        <button style="color:green" class="stepper-btn" data-key="od_s1" data-step="1.00">++</button>
+        <button style="color:red" class="stepper-btn" data-key="od_s1" data-step="-0.25">-</button>
+        <button style="color:green" class="stepper-btn" data-key="od_s1" data-step="0.25">+</button>
 
       </div>
     </div>
