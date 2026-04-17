@@ -117,6 +117,7 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
   font-weight: 500;
   color: #1a1a1a;
   min-height: 44px;
+  width:100%;
   display: flex;
   align-items: center;
 }
@@ -187,8 +188,7 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
 
 <!-- OD -->
 <div class="eye-card">
-  <div class="eye-label">Right Eye</div>
-
+  <div class="result-box empty" id="od_out">Adjust values above</div>
   <div class="meridian-row">
 
 
@@ -206,7 +206,6 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
 
 
       </div>
-      <span class="col-label">Streak Direction</span>
     </div>
 
 
@@ -219,7 +218,6 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
           <line x1="32" y1="4" x2="32" y2="60" stroke="#f5a623" stroke-width="10" stroke-linecap="round"/>
         </svg>
       </div>
-      <span class="col-label">Streak Direction</span>
     </div>
   </div>
 
@@ -241,7 +239,7 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
 </div>
 
 <div class="field">
-  <label>Axis 1</label>
+  <label>Streak Direction</label>
   <div class="stepper">
     <span class="stepper-val" id="od_a1_disp">0</span>
   </div>
@@ -271,7 +269,7 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
 </div>
 
 <div class="field">
-  <label>Axis 2</label>
+  <label>Streak Direction</label>
   <div class="stepper">
     <span class="stepper-val" id="od_a2_disp">90</span>
   </div>
@@ -285,13 +283,11 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
 </div>
 
 </div>
-
-  <div class="result-box empty" id="od_out">Adjust values above</div>
 </div>
 
 <!-- OS -->
 <div class="eye-card">
-  <div class="eye-label">Left Eye</div>
+  <div class="result-box empty" id="os_out">Adjust values above</div>
   <div class="meridian-row">
     <div class="meridian-col">
       <div class="line-canvas">
@@ -301,7 +297,6 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
           <line x1="32" y1="4" x2="32" y2="60" stroke="#f5a623" stroke-width="10" stroke-linecap="round"/>
         </svg>
       </div>
-      <span class="col-label">Streak Direction</span>
     </div>
     <div class="meridian-col">
       <div class="line-canvas">
@@ -311,7 +306,6 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
           <line x1="32" y1="4" x2="32" y2="60" stroke="#f5a623" stroke-width="10" stroke-linecap="round"/>
         </svg>
       </div>
-      <span class="col-label">Streak Direction</span>
     </div>
   </div>
   <div class="inputs-row">
@@ -330,7 +324,7 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
 </div>
 
 <div class="field">
-  <label>Axis 1</label>
+  <label>Streak Direction</label>
   <div class="stepper">
     <span class="stepper-val" id="os_a1_disp">0</span>
   </div>
@@ -360,7 +354,7 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
 </div>
 
 <div class="field">
-  <label>Axis 2</label>
+  <label>Streak Direction</label>
   <div class="stepper">
     <span class="stepper-val" id="os_a2_disp">90</span>
   </div>
@@ -375,7 +369,6 @@ h2 { font-size: 25px; font-weight: 700; margin-bottom: 20px; color:#888 }
 
 
   </div>
-  <div class="result-box empty" id="os_out">Adjust values above</div>
 </div>
 <div style="height:100px"></div>
 </div>
@@ -413,6 +406,8 @@ function updateDisp(id, val, isAxis) {
 function setResult(elId, s1, s2, a1, a2, wd) {
   let el = document.getElementById(elId);
 
+  let label = elId.includes("od") ? "Right Eye RX &nbsp;&nbsp;:&nbsp;&nbsp;" : "Left Eye RX &nbsp;&nbsp;:&nbsp;&nbsp;";
+
   let S = Math.max(s1, s2);
   let C = Math.min(s1, s2) - S;
   let A = (s1 >= s2) ? a1 : a2;
@@ -421,15 +416,15 @@ function setResult(elId, s1, s2, a1, a2, wd) {
   let sc = finalS >= 0 ? "pos" : "neg";
   let cc = C >= 0 ? "pos" : "neg";
 
-  // ✅ NO ASTIGMATISM → SPHERE ONLY
   if (Math.abs(C) < 0.001) {
-    el.innerHTML = `<span class="${sc}">${fmt(finalS)}</span>`;
+    el.innerHTML =
+      `<span>${label}</span><span class="${sc}">${fmt(finalS)}</span>`;
     el.className = "result-box";
     return;
   }
 
-  // ✅ WITH ASTIGMATISM → FULL FORMAT
   el.innerHTML =
+    `<span>${label}</span>` +
     `<span class="${sc}">${fmt(finalS)}</span>` +
     `&nbsp;/&nbsp;<span class="${cc}">${fmt(C)}</span>` +
     `&nbsp;&times;&nbsp;<span>${A}&deg;</span>`;
